@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>join &#8212; Preprocessing  ドキュメント</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="spread" href="spread.html" />
+    <link rel="prev" title="aggregation" href="aggregation.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="join">
+<h1>join<a class="headerlink" href="#join" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id1">
+<h2>マスタテーブルとの結合<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>シンプルに、ホテルとそのレビューデータの結合</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 特定の条件を満たすデータのみ抽出した上で、既存のkeyを用いて結合</span>
+<span class="c1"># df_hotelsとdf_reviewsを、nameが等しいもの同士で内部結合</span>
+<span class="c1"># countryがUSのデータのみ抽出</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_reviews</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;country == &quot;US&quot;&#39;</span><span class="p">),</span>
+         <span class="n">df_hotels</span><span class="p">,</span>
+         <span class="n">on</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>エリア名称から結合用keyを作成して結合</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># area_nameごとにホテル数をカウント</span>
+<span class="n">small_area_mst</span> <span class="o">=</span> <span class="n">df_hotels</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;province&#39;</span><span class="p">,</span> <span class="s1">&#39;city&#39;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">small_area_mst</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;province&#39;</span><span class="p">,</span> <span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;hotel_cnt&#39;</span><span class="p">]</span>
+
+<span class="c1"># 20件以上であればjoin_area_idをsmall_area_name、以下ならばbig_area_nameとして設定（-1は、自ホテルを引いている）</span>
+<span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;join_area_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;hotel_cnt&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">,</span>
+                                          <span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">],</span>
+                                          <span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;province&#39;</span><span class="p">])</span>
+
+<span class="c1"># 必要なくなった列を削除</span>
+<span class="n">small_area_mst</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;hotel_cnt&#39;</span><span class="p">,</span> <span class="s1">&#39;province&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># レコメンド元になるホテルにsmall_area_mstを結合することで、join_area_idを設定</span>
+<span class="n">base_hotel_mst</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_hotels</span><span class="p">,</span> <span class="n">small_area_mst</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;city&#39;</span><span class="p">)</span> \
+                   <span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s1">&#39;hotel_id&#39;</span><span class="p">,</span> <span class="s1">&#39;join_area_id&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>サンプルコード</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">- マスタテーブルとの結合</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># ガベージコレクション(必要ないメモリの解放)のためのライブラリ</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+
+<span class="n">df_reviews</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../data/Datafiniti_Hotel_Reviews.csv&#39;</span><span class="p">)</span>
+<span class="n">df_hotels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../data/hotels.csv&#39;</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># マスタテーブルとの結合</span>
+
+<span class="c1"># 特定の条件を満たすデータのみ抽出した上で、既存のkeyを用いて結合</span>
+<span class="c1"># df_hotelsとdf_reviewsを、nameが等しいもの同士で内部結合</span>
+<span class="c1"># countryがUSのデータのみ抽出</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_reviews</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;country == &quot;US&quot;&#39;</span><span class="p">),</span>
+         <span class="n">df_hotels</span><span class="p">,</span>
+         <span class="n">on</span><span class="o">=</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1">#</span>
+<span class="c1"># area_nameごとにホテル数をカウント</span>
+<span class="n">small_area_mst</span> <span class="o">=</span> <span class="n">df_hotels</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;province&#39;</span><span class="p">,</span> <span class="s1">&#39;city&#39;</span><span class="p">],</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">small_area_mst</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;province&#39;</span><span class="p">,</span> <span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;hotel_cnt&#39;</span><span class="p">]</span>
+
+<span class="c1"># 20件以上であればjoin_area_idをsmall_area_name、以下ならばbig_area_nameとして設定（-1は、自ホテルを引いている）</span>
+<span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;join_area_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;hotel_cnt&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">,</span>
+                                          <span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">],</span>
+                                          <span class="n">small_area_mst</span><span class="p">[</span><span class="s1">&#39;province&#39;</span><span class="p">])</span>
+
+<span class="c1"># 必要なくなった列を削除</span>
+<span class="n">small_area_mst</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;hotel_cnt&#39;</span><span class="p">,</span> <span class="s1">&#39;province&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># レコメンド元になるホテルにsmall_area_mstを結合することで、join_area_idを設定</span>
+<span class="n">base_hotel_mst</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_hotels</span><span class="p">,</span> <span class="n">small_area_mst</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;city&#39;</span><span class="p">)</span> \
+                   <span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s1">&#39;hotel_id&#39;</span><span class="p">,</span> <span class="s1">&#39;join_area_id&#39;</span><span class="p">]]</span>
+
+<span class="c1"># 下記は必要に応じて、メモリを解放(必須ではないですがメモリ量に余裕のないときに利用)</span>
+<span class="k">del</span> <span class="n">small_area_mst</span>
+<span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">join</a><ul>
+<li><a class="reference internal" href="#id1">マスタテーブルとの結合</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="aggregation.html" title="前の章へ">aggregation</a></li>
+      <li>Next: <a href="spread.html" title="次の章へ">spread</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/Transform/shapes/join.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, EY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/Transform/shapes/join.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

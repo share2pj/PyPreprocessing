@@ -1,0 +1,43 @@
+.. Preprocessing documentation master file, created by
+   sphinx-quickstart on Thu Mar 28 11:28:08 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+spread
+==================
+
+横持変換
+----------------------------------
+
+.. code-block:: python
+
+   df = pd.pivot_table(mpg, index='origin', columns='cylinders',
+                       values='id',
+                       aggfunc=lambda x: len(x), fill_value=0)
+
+マトリックス変換
+----------------------------------
+
+.. code-block:: python
+
+   cnt_tb = mpg \
+       .groupby(['origin', 'cylinders'])['id'].size() \
+       .reset_index()
+   cnt_tb.columns = ['origin', 'cylinders', 'type_cnt']
+
+   # sparseMatrixの行／列に該当する列の値をカテゴリ型に変換
+   origin_id = pd.Categorical(cnt_tb['origin'])
+   cylinders_num = pd.Categorical(cnt_tb['cylinders'])
+
+   # スパースマトリックスを生成
+   # 1の引数は、指定した行列に対応した値、行番号、列番号の配列をまとめたタプルを指定
+   # shapeには、スパースマトリックスのサイズを指定（行数／列数のタプルを指定）
+   # （customer_id.codesはインデックス番号の取得）
+   # （len(customer_id.categories)は、customer_idのユニークな数を取得）
+   csc_matrix((cnt_tb['type_cnt'], (origin_id.codes, cylinders_num.codes)),
+              shape=(len(origin_id.categories), len(cylinders_num.categories)))
+
+サンプルコード
+
+.. py:currentmodule:: ../../../transform/shapes/spread_utils.py
+.. literalinclude:: ../../../transform/shapes/spread_utils.py

@@ -1,0 +1,412 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>number &#8212; Preprocessing  ドキュメント</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="datetime" href="datetime.html" />
+    <link rel="prev" title="character" href="character.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="number">
+<span id="making-a-table"></span><h1>number<a class="headerlink" href="#number" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id1">
+<h2>数値型変換<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p># 単一の値の型変換
+# データ型の確認</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># 整数型へ変換</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span><span class="p">(</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># 浮動小数点型へ変換</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span><span class="p">(</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># dfオブジェクトの型変換
+# データ型の確認</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">]})</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dtypes</span>
+</pre></div>
+</div>
+<p># データ型指定</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># int64</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># float64</span>
+</pre></div>
+</div>
+<p># bit明示的な変換
+# サポートされているbit数は以下の通り
+# int/uint 8,16,32,64
+# float      16,32,64,128</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int8&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float128&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>対数化<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> \
+   <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>カテゴリ変数化<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> \
+   <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>正規化<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 少数点以下を扱えるようにするためfloat型に変換</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># 正規化を行うオブジェクトを生成</span>
+<span class="n">ss</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
+<span class="c1"># fit_transform関数は、fit関数（正規化するための前準備の計算）と</span>
+<span class="c1"># transform関数（準備された情報から正規化の変換処理を行う）の両方を行う</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">]])</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;count_num_normalized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price_normalized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>外れ値除去（平均値±3σ以内のデータのみ抽出）<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+  <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]))</span> <span class="o">/</span>
+   <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>次元圧縮<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># n_componentsに、主成分分析で変換後の次元数を設定</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># 主成分分析を実行</span>
+<span class="c1"># pcaに主成分分析の変換パラメータが保存され、返り値に主成分分析後の値が返される</span>
+<span class="n">pca_values</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="s1">&#39;thickness&#39;</span><span class="p">]])</span>
+
+<span class="c1"># 累積寄与率と寄与率の確認</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;累積寄与率: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;各次元の寄与率: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">))</span>
+
+<span class="c1"># predict関数を利用し、同じ次元圧縮処理を実行</span>
+<span class="n">pca_newvalues</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="s1">&#39;thickness&#39;</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>補完/欠損値処理<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p># 特定の値で補完
+# replace関数によって、Noneをnanに変換
+# （Noneを指定する際には文字列として指定する必要がある）</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># dropna関数によって、thicknessにnanを含むレコードを削除</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;thickness&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># fillna関数によって、thicknessの欠損値を1で補完</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">production_miss_num</span><span class="p">[</span><span class="s1">&#39;thickness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># 平均値で補完
+# thicknessの平均値を計算</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">thickness_mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;thickness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+<p># thicknessの欠損値をthicknessの平均値で補完</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;thickness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">thickness_mean</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># 連鎖式による多重代入法
+# replace関数によって、Noneをnanに変換</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># mice関数を利用するためにデータ型を変換（mice関数内でモデル構築をするため）</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;thickness&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;thickness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;fault_flg&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;fault_flg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="c1"># ダミー変数化</span>
+<span class="n">df_dummy_flg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;fault_flg&#39;</span><span class="p">]],</span> <span class="n">drop_first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># mice関数にPMMを指定して、多重代入法を実施</span>
+<span class="c1"># n_imputationsは取得するデータセットの数</span>
+<span class="c1"># n_burn_inは値を取得する前に試行する回数</span>
+<span class="n">mice</span> <span class="o">=</span> <span class="n">MICE</span><span class="p">(</span><span class="n">n_imputations</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_burn_in</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">impute_type</span><span class="o">=</span><span class="s1">&#39;pmm&#39;</span><span class="p">)</span>
+
+<span class="c1"># 処理内部でTensorFlowを利用</span>
+<span class="n">df_mice</span> <span class="o">=</span> <span class="n">mice</span><span class="o">.</span><span class="n">multiple_imputations</span><span class="p">(</span>
+    <span class="c1"># 数値の列とダミー変数を連結</span>
+   <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;length&#39;</span><span class="p">,</span> <span class="s1">&#39;thickness&#39;</span><span class="p">]],</span>
+             <span class="n">df_dummy_flg</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># 下記に補完する値が格納されている</span>
+<span class="n">df_mice</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>サンプルコード</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">- 数値型変換</span>
+<span class="sd">- 対数化</span>
+<span class="sd">- カテゴリ化</span>
+<span class="sd">- 正規化</span>
+<span class="sd">- 外れ値除去</span>
+<span class="sd">- 次元圧縮</span>
+<span class="sd">- 補完</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># from fancyimpute import MICE   # fancyimpute requires Microsoft Visual C++ Build Tools</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="k">import</span> <span class="n">PCA</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_boston</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="k">import</span> <span class="n">load_dataset</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">boston</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">boston</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]],</span>
+                  <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boston</span><span class="p">[</span><span class="s1">&#39;feature_names&#39;</span><span class="p">],</span> <span class="s1">&#39;price&#39;</span><span class="p">))</span>
+
+<span class="n">mpg</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;mpg&#39;</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 数値型変換</span>
+
+<span class="c1"># 単一の値の型変換</span>
+<span class="c1"># データ型の確認</span>
+<span class="nb">type</span><span class="p">(</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># 整数型へ変換</span>
+<span class="nb">int</span><span class="p">(</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># 浮動小数点型へ変換</span>
+<span class="nb">float</span><span class="p">(</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># dfオブジェクトの型変換</span>
+<span class="c1"># データ型の確認</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">40000</span> <span class="o">/</span> <span class="mi">3</span><span class="p">]})</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dtypes</span>
+
+<span class="c1"># データ型指定</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># int64</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># float64</span>
+
+<span class="c1"># bit明示的な変換</span>
+<span class="c1"># サポートされているbit数は以下の通り</span>
+<span class="c1"># int/uint 8,16,32,64</span>
+<span class="c1"># float      16,32,64</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int8&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 対数化</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_log&#39;</span><span class="p">]</span> <span class="o">=</span> \
+  <span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># カテゴリ変数化</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span> <span class="o">=</span> \
+  <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">50</span><span class="p">)</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 正規化</span>
+<span class="c1"># 少数点以下を扱えるようにするためfloat型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># 正規化を行うオブジェクトを生成</span>
+<span class="n">ss</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
+<span class="c1"># fit_transform関数は、fit関数（正規化するための前準備の計算）と</span>
+<span class="c1"># transform関数（準備された情報から正規化の変換処理を行う）の両方を行う</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ss</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">]])</span>
+
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;weight_normalized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_normalized&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">result</span><span class="p">]</span>
+
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 外れ値除去（平均値±3σ以内のデータのみ抽出）</span>
+<span class="n">reserve_tb</span> <span class="o">=</span> <span class="n">mpg</span><span class="p">[</span>
+  <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;displacement&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;displacement&#39;</span><span class="p">]))</span> <span class="o">/</span>
+   <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;displacement&#39;</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 次元圧縮</span>
+
+<span class="c1"># n_componentsに、主成分分析で変換後の次元数を設定</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># 主成分分析を実行</span>
+<span class="c1"># pcaに主成分分析の変換パラメータが保存され、返り値に主成分分析後の値が返される</span>
+<span class="n">pca_values</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="s1">&#39;displacement&#39;</span><span class="p">]])</span>
+
+<span class="c1"># 累積寄与率と寄与率の確認</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;累積寄与率: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;各次元の寄与率: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span><span class="p">))</span>
+
+<span class="c1"># predict関数を利用し、同じ次元圧縮処理を実行</span>
+<span class="n">pca_newvalues</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;weight&#39;</span><span class="p">,</span> <span class="s1">&#39;displacement&#39;</span><span class="p">]])</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 補完/欠損値処理</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">boston</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">boston</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]],</span>
+                  <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boston</span><span class="p">[</span><span class="s1">&#39;feature_names&#39;</span><span class="p">],</span> <span class="s1">&#39;price&#39;</span><span class="p">))</span>
+<span class="c1"># 特定の値で補完</span>
+<span class="c1"># replace関数によって、Noneをnanに変換</span>
+<span class="c1"># （Noneを指定する際には文字列として指定する必要がある）</span>
+<span class="n">df</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># dropna関数によって、priceにnanを含むレコードを削除</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># fillna関数によって、thicknessの欠損値を1で補完</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 平均値で補完</span>
+<span class="c1"># priceの平均値を計算</span>
+<span class="n">price_mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># priceの欠損値をpriceの平均値で補完</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">price_mean</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 連鎖式による多重代入法</span>
+<span class="c1"># replace関数によって、Noneをnanに変換</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">production_miss_num = load_production_missing_num()</span>
+<span class="sd">production_miss_num.replace(&#39;None&#39;, np.nan, inplace=True)</span>
+
+<span class="sd"># mice関数を利用するためにデータ型を変換（mice関数内でモデル構築をするため）</span>
+<span class="sd">production_miss_num[&#39;thickness&#39;] = production_miss_num[&#39;thickness&#39;].astype(&#39;float64&#39;)</span>
+<span class="sd">production_miss_num[&#39;type&#39;] = production_miss_num[&#39;type&#39;].astype(&#39;category&#39;)</span>
+<span class="sd">production_miss_num[&#39;fault_flg&#39;] = production_miss_num[&#39;fault_flg&#39;].astype(&#39;category&#39;)</span>
+
+<span class="sd"># ダミー変数化</span>
+<span class="sd">production_dummy_flg = pd.get_dummies(production_miss_num[[&#39;type&#39;, &#39;fault_flg&#39;]], drop_first=True)</span>
+
+<span class="sd"># mice関数にPMMを指定して、多重代入法を実施</span>
+<span class="sd"># n_imputationsは取得するデータセットの数</span>
+<span class="sd"># n_burn_inは値を取得する前に試行する回数</span>
+<span class="sd">mice = MICE(n_imputations=10, n_burn_in=50, impute_type=&#39;pmm&#39;)</span>
+
+<span class="sd"># 処理内部でTensorFlowを利用</span>
+<span class="sd">production_mice = mice.multiple_imputations(</span>
+<span class="sd">  # 数値の列とダミー変数を連結</span>
+<span class="sd">  pd.concat([production_miss_num[[&#39;length&#39;, &#39;thickness&#39;]],</span>
+<span class="sd">             production_dummy_flg], axis=1)</span>
+<span class="sd">)</span>
+
+<span class="sd"># 下記に補完する値が格納されている</span>
+<span class="sd">production_mice[0]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">number</a><ul>
+<li><a class="reference internal" href="#id1">数値型変換</a></li>
+<li><a class="reference internal" href="#id2">対数化</a></li>
+<li><a class="reference internal" href="#id3">カテゴリ変数化</a></li>
+<li><a class="reference internal" href="#id4">正規化</a></li>
+<li><a class="reference internal" href="#id5">外れ値除去（平均値±3σ以内のデータのみ抽出）</a></li>
+<li><a class="reference internal" href="#id6">次元圧縮</a></li>
+<li><a class="reference internal" href="#id7">補完/欠損値処理</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="character.html" title="前の章へ">character</a></li>
+      <li>Next: <a href="datetime.html" title="次の章へ">datetime</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/Transform/types/number.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, EY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/Transform/types/number.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

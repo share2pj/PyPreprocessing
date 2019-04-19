@@ -1,0 +1,80 @@
+.. Preprocessing documentation master file, created by
+   sphinx-quickstart on Thu Mar 28 11:28:08 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+split
+=========================================
+
+ホールドアウト検証
+----------------------------------
+
+.. code-block:: python
+
+   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+   # 作成したdfすべてについて、行名を現在の行番号に直す
+   df_list = ['x_train', 'x_test', 'y_train', 'y_test']
+
+   for name in df_list:
+       vars()[name].reset_index(inplace=True, drop=True)
+
+k分割交差検証
+----------------------------------
+
+.. code-block:: python
+
+   k_fold = KFold(n_splits=4, shuffle=True)
+
+   # 対象の行番号リストを生成
+   row_no_list = list(range(len(y_train)))
+
+   # x_train, y_trainから、k分割したtrain/testを新たに生成する
+   # cv = cross validation
+   # k_fold関数を使うと、n_splitsで定義した個数のtrain - testの組み合わせリストが生成される(下のコードは、4周する)
+   for train_cv_no, test_cv_no in k_fold.split(row_no_list):
+       # 交差検証におけるデータを抽出
+       x_train_cv, x_test_cv = x_train.iloc[train_cv_no, :], x_train.iloc[test_cv_no, :]
+       y_train_cv, y_test_cv = y_train.iloc[train_cv_no, :], y_train.iloc[test_cv_no, :]
+
+rolling window検証
+----------------------------------
+
+.. code-block:: python
+
+   # 元データをid順に並び替え
+   df.sort_values(by='id')
+
+   # rolling windowのパラメータ設定
+   train_window_start = 1  # 開始行番号
+   train_window_end = 24  # 終了行番号を指定
+   horizon = 12  # 検証データのデータ数を指定
+   skip = 12  # skipにスライドするデータ数を設定
+
+   data_end = len(df.index)  # データの末尾の値を、処理の終了判定のために取得
+
+   while True:
+       # 検証データの終了行番号を計算
+       test_window_end = train_window_end + horizon
+
+       # 行番号を指定して、元データから学習データを取得
+       # train_window_startの部分を1に固定すれば、学習データを増やしていく検証に変更可能
+       train = df[train_window_start:train_window_end]
+
+       # 行番号を指定して、元データから検証データを取得
+       test = df[(train_window_end + 1):test_window_end]
+
+       # 検証データの終了行番号が元データの行数以上になっているか判定、全データを対象にした場合終了
+       if test_window_end >= data_end:
+           break
+
+       # 本来は機械学習モデルの構築、検証をするがここでは割愛
+       # データをスライドさせる
+       train_window_start += skip
+       train_window_end += skip
+
+
+サンプルコード
+
+.. py:currentmodule:: ../../../transform/shapes/split_utils.py
+.. literalinclude:: ../../../transform/shapes/split_utils.py

@@ -1,0 +1,323 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>category &#8212; Preprocessing  ドキュメント</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="character" href="character.html" />
+    <link rel="prev" title="generate" href="../shapes/generate.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="category">
+<h1>category<a class="headerlink" href="#category" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id1">
+<h2>カテゴリ型変換<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># originがjapanのときにTRUEとするブール型を追加</span>
+<span class="c1"># このコードは、as.type関数を利用しなくてもブール型に変換</span>
+<span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;origin&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="s1">&#39;japan&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+
+<span class="c1"># originをカテゴリ型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]</span> <span class="o">=</span> \
+  <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;japan&#39;</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">])</span>
+
+<span class="c1"># astype関数でも変換可能</span>
+<span class="c1"># mpg[&#39;origin&#39;] = mpg[&#39;origin&#39;].astype(&#39;category&#39;)</span>
+
+<span class="c1"># インデックスデータはcodesに格納されている</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+
+<span class="c1"># マスタデータはcategoriesに格納されている</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>ダミー変数化<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ダミー変数化する前にカテゴリ型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">])</span>
+
+<span class="c1"># get_dummies関数によってsexをダミー変数化</span>
+<span class="c1"># drop_firstをFalseにすると、カテゴリ値の全種類の値のダミーフラグを生成</span>
+<span class="n">dummy_vars</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">],</span> <span class="n">drop_first</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>カテゴリ値集約<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pd.Categoricalによって、category型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span> <span class="o">=</span> \
+  <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">50</span><span class="p">)</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># マスタデータに&#39;200以上&#39;を追加</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">add_categories</span><span class="p">([</span><span class="s1">&#39;200以上&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># 集約するデータを書き換え</span>
+<span class="c1"># category型は、=または!=の判定のみ可能なので、isin関数を利用</span>
+<span class="n">mpg</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mf">200.0</span><span class="p">,</span> <span class="mf">210.0</span><span class="p">,</span> <span class="mf">220.0</span><span class="p">,</span> <span class="mf">230.0</span><span class="p">]),</span> <span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;200以上&#39;</span>
+
+<span class="c1"># 利用されていないマスタデータを削除</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">remove_unused_categories</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;sex_and_age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span>
+<span class="c1"># 連結する列を抽出</span>
+<span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;cylinders&#39;</span><span class="p">]]</span>
+
+  <span class="c1"># lambda関数内でoriginと2区切りのcylindersを_を挟んで文字列として連結</span>
+  <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;{}_{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>カテゴリ値数値化<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 製品種別ごとの障害数</span>
+<span class="n">fault_cnt_per_type</span> <span class="o">=</span> <span class="n">production</span> \
+  <span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">&#39;fault_flg&#39;</span><span class="p">)</span> \
+  <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)[</span><span class="s1">&#39;fault_flg&#39;</span><span class="p">]</span> \
+  <span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+<span class="c1"># 製品種別ごとの製造数</span>
+<span class="n">type_cnt</span> <span class="o">=</span> <span class="n">production</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)[</span><span class="s1">&#39;fault_flg&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+<span class="n">production</span><span class="p">[</span><span class="s1">&#39;type_fault_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">production</span><span class="p">[[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;fault_flg&#39;</span><span class="p">]]</span> \
+  <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>
+         <span class="p">(</span><span class="n">fault_cnt_per_type</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">/</span> <span class="p">(</span><span class="n">type_cnt</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+         <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>カテゴリ値補完<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># replace関数によって、Noneをnanに変換</span>
+<span class="n">mpg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># 欠損していないデータの抽出</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">mpg</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="c1"># 欠損しているデータの抽出</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">mpg</span> \
+  <span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mpg</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">index</span><span class="p">),</span> <span class="p">:]</span>
+
+<span class="c1"># knnモデル生成、n_neighborsはknnのkパラメータ</span>
+<span class="n">kn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># knnモデル学習</span>
+<span class="n">kn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;mpg&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">]],</span> <span class="n">train</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">])</span>
+
+<span class="c1"># knnモデルによって予測値を計算し、mpgを補完</span>
+<span class="n">test</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test</span><span class="p">[[</span><span class="s1">&#39;mpg&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>サンプルコード</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">- カテゴリ型変換</span>
+<span class="sd">- ダミー変数化</span>
+<span class="sd">- カテゴリ値集約</span>
+<span class="sd">- カテゴリ値数値化</span>
+<span class="sd">- カテゴリ値補完</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="k">import</span> <span class="n">load_boston</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="k">import</span> <span class="n">load_dataset</span>
+
+<span class="n">boston</span> <span class="o">=</span> <span class="n">load_boston</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">boston</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">boston</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]],</span>
+                  <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">boston</span><span class="p">[</span><span class="s1">&#39;feature_names&#39;</span><span class="p">],</span> <span class="s1">&#39;price&#39;</span><span class="p">))</span>
+
+<span class="n">mpg</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;mpg&#39;</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># カテゴリ型変換</span>
+<span class="c1"># originがjapanのときにTRUEとするブール型を追加</span>
+<span class="c1"># このコードは、as.type関数を利用しなくてもブール型に変換</span>
+<span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;origin&#39;</span><span class="p">]]</span> <span class="o">==</span> <span class="s1">&#39;japan&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+
+<span class="c1"># originをカテゴリ型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]</span> <span class="o">=</span> \
+  <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">],</span> <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;japan&#39;</span><span class="p">,</span> <span class="s1">&#39;other&#39;</span><span class="p">])</span>
+
+<span class="c1"># astype関数でも変換可能</span>
+<span class="c1"># mpg[&#39;origin&#39;] = mpg[&#39;origin&#39;].astype(&#39;category&#39;)</span>
+
+<span class="c1"># インデックスデータはcodesに格納されている</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+
+<span class="c1"># マスタデータはcategoriesに格納されている</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;made_in_japan&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># ダミー変数化</span>
+
+<span class="c1"># ダミー変数化する前にカテゴリ型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">])</span>
+
+<span class="c1"># get_dummies関数によってsexをダミー変数化</span>
+<span class="c1"># drop_firstをFalseにすると、カテゴリ値の全種類の値のダミーフラグを生成</span>
+<span class="n">dummy_vars</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">],</span> <span class="n">drop_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># カテゴリ値集約</span>
+
+<span class="c1"># pd.Categoricalによって、category型に変換</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span> <span class="o">=</span> \
+  <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">/</span><span class="mi">50</span><span class="p">)</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># マスタデータに&#39;200以上&#39;を追加</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">add_categories</span><span class="p">([</span><span class="s1">&#39;200以上&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 集約するデータを書き換え</span>
+<span class="c1"># category型は、=または!=の判定のみ可能なので、isin関数を利用</span>
+<span class="n">mpg</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mf">200.0</span><span class="p">,</span> <span class="mf">210.0</span><span class="p">,</span> <span class="mf">220.0</span><span class="p">,</span> <span class="mf">230.0</span><span class="p">]),</span> <span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;200以上&#39;</span>
+
+<span class="c1"># 利用されていないマスタデータを削除</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;horsepower_rank&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">remove_unused_categories</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="n">mpg</span><span class="p">[</span><span class="s1">&#39;sex_and_age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span>
+  <span class="c1"># 連結する列を抽出</span>
+  <span class="n">mpg</span><span class="p">[[</span><span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;cylinders&#39;</span><span class="p">]]</span>
+
+    <span class="c1"># lambda関数内でoriginと2区切りのcylindersを_を挟んで文字列として連結</span>
+    <span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+           <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># カテゴリ値数値化</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># 製品種別ごとの障害数</span>
+<span class="sd">fault_cnt_per_type = production \</span>
+<span class="sd">  .query(&#39;fault_flg&#39;) \</span>
+<span class="sd">  .groupby(&#39;type&#39;)[&#39;fault_flg&#39;] \</span>
+<span class="sd">  .count()</span>
+
+<span class="sd"># 製品種別ごとの製造数</span>
+<span class="sd">type_cnt = production.groupby(&#39;type&#39;)[&#39;fault_flg&#39;].count()</span>
+
+<span class="sd">production[&#39;type_fault_rate&#39;] = production[[&#39;type&#39;, &#39;fault_flg&#39;]] \</span>
+<span class="sd">  .apply(lambda x:</span>
+<span class="sd">         (fault_cnt_per_type[x[0]] - int(x[1])) / (type_cnt[x[0]] - 1),</span>
+<span class="sd">         axis=1)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># カテゴリ値補完</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># replace関数によって、Noneをnanに変換</span>
+<span class="sd">mpg.replace(&#39;None&#39;, np.nan, inplace=True)</span>
+
+<span class="sd"># 欠損していないデータの抽出</span>
+<span class="sd">train = mpg.dropna(subset=[&#39;origin&#39;], inplace=False)</span>
+
+<span class="sd"># 欠損しているデータの抽出</span>
+<span class="sd">test = mpg \</span>
+<span class="sd">  .loc[mpg.index.difference(train.index), :]</span>
+
+<span class="sd"># knnモデル生成、n_neighborsはknnのkパラメータ</span>
+<span class="sd">kn = KNeighborsClassifier(n_neighbors=3)</span>
+
+<span class="sd"># knnモデル学習</span>
+<span class="sd">kn.fit(train[[&#39;mpg&#39;, &#39;horsepower&#39;]], train[&#39;origin&#39;])</span>
+
+<span class="sd"># knnモデルによって予測値を計算し、mpgを補完</span>
+<span class="sd">test[&#39;origin&#39;] = kn.predict(test[[&#39;mpg&#39;, &#39;horsepower&#39;]])</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">category</a><ul>
+<li><a class="reference internal" href="#id1">カテゴリ型変換</a></li>
+<li><a class="reference internal" href="#id2">ダミー変数化</a></li>
+<li><a class="reference internal" href="#id3">カテゴリ値集約</a></li>
+<li><a class="reference internal" href="#id4">カテゴリ値数値化</a></li>
+<li><a class="reference internal" href="#id5">カテゴリ値補完</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../shapes/generate.html" title="前の章へ">generate</a></li>
+      <li>Next: <a href="character.html" title="次の章へ">character</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/Transform/types/category.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, EY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/Transform/types/category.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

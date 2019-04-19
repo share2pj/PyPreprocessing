@@ -1,0 +1,305 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>datetime &#8212; Preprocessing  ドキュメント</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="prev" title="number" href="number.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="datetime">
+<h1>datetime<a class="headerlink" href="#datetime" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id1">
+<h2>日時型処理<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># to_datetime関数で、datetime64[ns]型に変換</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+<span class="c1"># datetime64[ns]型から日付情報を取得</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span>
+               <span class="n">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>日時、日付型変換<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># dateUpdatedをdatetime64[ns]型に変換</span>
+<span class="c1"># unitの標準はns(nano seconds) argsに指定することでms, usなど使用可能だが、する場面はほぼないのでは</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+<span class="c1"># dateUpdatedをdatetime64[ns]型に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+<span class="c1"># timedeltaはweeks, days, hours, minutes, seconds, microseconds, millisecondsをサポート（年月は非対応）</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>年月日、時刻、曜日変換<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># datetimeに変換すると、Series.dtの各パラメータから値を取得可能</span>
+<span class="c1"># year, month, day, dayofweek, hour, minute, second</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>  <span class="c1"># 年を取得</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">dayofweek</span>  <span class="c1"># 曜日（0=日曜日、1＝月曜日）を数値で取得</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">second</span>  <span class="c1"># 時刻の秒を取得</span>
+
+<span class="c1"># 指定したフォーマットの文字列に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>日時差計算<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 年の差分を計算（月以下の日時要素は考慮しない）</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+<span class="c1"># 月の差分を取得（日以下の日時要素は考慮しない）</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> \
+ <span class="o">-</span> <span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+
+<span class="c1"># 日・時・分・秒単位で差分を計算</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[D]&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[h]&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[m]&#39;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[s]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>季節変換<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>カテゴリを作成して、applyで処理</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 月の数字を季節に変換する関数</span>
+<span class="k">def</span> <span class="nf">to_season</span><span class="p">(</span><span class="n">month_num</span><span class="p">):</span>
+    <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;winter&#39;</span>
+    <span class="k">if</span> <span class="mi">3</span> <span class="o">&lt;=</span> <span class="n">month_num</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;spring&#39;</span>
+    <span class="k">elif</span> <span class="mi">6</span> <span class="o">&lt;=</span> <span class="n">month_num</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;summer&#39;</span>
+    <span class="k">elif</span> <span class="mi">9</span> <span class="o">&lt;=</span> <span class="n">month_num</span> <span class="o">&lt;=</span> <span class="mi">11</span><span class="p">:</span>
+        <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;autumn&#39;</span>
+    <span class="k">return</span> <span class="n">season</span>
+
+
+<span class="c1"># 季節に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;update_season&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span>
+    <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">to_season</span><span class="p">),</span>
+    <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spring&#39;</span><span class="p">,</span> <span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="s1">&#39;autumn&#39;</span><span class="p">,</span> <span class="s1">&#39;winter&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="timezone">
+<h2>Timezone変換<a class="headerlink" href="#timezone" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>TBD</p>
+</div>
+<div class="section" id="id6">
+<h2>平日休日判定<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 休日マスタと結合 holiday_flagにtrue/falseが入っているので、その結果に応じてフィルタリング</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">,</span> <span class="n">holiday_mst</span><span class="p">,</span>
+         <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;target_day&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>サンプルコード</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">- 日時型処理</span>
+<span class="sd">- 日時、日付型変換</span>
+<span class="sd">- 年月日、時刻、曜日変換</span>
+<span class="sd">- 日時差計算</span>
+<span class="sd">- 季節変換</span>
+<span class="sd">- Timezone変換</span>
+<span class="sd">- 平日休日判定</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="n">df_reviews</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../../data/Datafiniti_Hotel_Reviews.csv&#39;</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 日時型処理</span>
+<span class="c1"># to_datetime関数で、datetime64[ns]型に変換</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+<span class="c1"># datetime64[ns]型から日付情報を取得</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span>
+               <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">date</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 日時、日付型変換</span>
+<span class="c1"># dateUpdatedをdatetime64[ns]型に変換</span>
+<span class="c1"># unitの標準はns(nano seconds) argsに指定することでms, usなど使用可能だが、する場面はほぼないのでは</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># datetimeに変換すると、Series.dtの各パラメータから値を取得可能</span>
+<span class="c1"># year, month, day, dayofweek, hour, minute, second</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>  <span class="c1"># 年を取得</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">dayofweek</span>  <span class="c1"># 曜日（0=日曜日、1＝月曜日）を数値で取得</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">second</span>  <span class="c1"># 時刻の秒を取得</span>
+
+<span class="c1"># 指定したフォーマットの文字列に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 日時差計算</span>
+<span class="c1"># dateUpdated, dateUpdatedをdatetime64[ns]型に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+<span class="c1"># 年の差分を計算（月以下の日時要素は考慮しない）</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+
+<span class="c1"># 月の差分を取得（日以下の日時要素は考慮しない）</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">)</span> \
+ <span class="o">-</span> <span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+
+<span class="c1"># 日単位で差分を計算</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[D]&#39;</span><span class="p">)</span>
+
+<span class="c1"># 時単位で差分を計算</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[h]&#39;</span><span class="p">)</span>
+
+<span class="c1"># 分単位で差分を計算</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[m]&#39;</span><span class="p">)</span>
+
+<span class="c1"># 秒単位で差分を計算</span>
+<span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateAdded&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;timedelta64[s]&#39;</span><span class="p">)</span>
+
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 日時計算</span>
+<span class="c1"># dateUpdatedをdatetime64[ns]型に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+<span class="c1"># timedeltaはweeks, days, hours, minutes, seconds, microseconds, millisecondsをサポート（年月は非対応）</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="c1"># 季節変換（カテゴリ文字列に変換する）</span>
+<span class="c1"># dateUpdatedをdatetime64[ns]型に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># 月の数字を季節に変換する関数</span>
+<span class="k">def</span> <span class="nf">to_season</span><span class="p">(</span><span class="n">month_num</span><span class="p">):</span>
+    <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;winter&#39;</span>
+    <span class="k">if</span> <span class="mi">3</span> <span class="o">&lt;=</span> <span class="n">month_num</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;spring&#39;</span>
+    <span class="k">elif</span> <span class="mi">6</span> <span class="o">&lt;=</span> <span class="n">month_num</span> <span class="o">&lt;=</span> <span class="mi">8</span><span class="p">:</span>
+        <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;summer&#39;</span>
+    <span class="k">elif</span> <span class="mi">9</span> <span class="o">&lt;=</span> <span class="n">month_num</span> <span class="o">&lt;=</span> <span class="mi">11</span><span class="p">:</span>
+        <span class="n">season</span> <span class="o">=</span> <span class="s1">&#39;autumn&#39;</span>
+    <span class="k">return</span> <span class="n">season</span>
+
+
+<span class="c1"># 季節に変換</span>
+<span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;update_season&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Categorical</span><span class="p">(</span>
+    <span class="n">df_reviews</span><span class="p">[</span><span class="s1">&#39;dateUpdated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">to_season</span><span class="p">),</span>
+    <span class="n">categories</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;spring&#39;</span><span class="p">,</span> <span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="s1">&#39;autumn&#39;</span><span class="p">,</span> <span class="s1">&#39;winter&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># 平日休日判定</span>
+<span class="sd"># 休日マスタと結合 holiday_flagにtrue/falseが入っているので、その結果に応じてフィルタリング</span>
+<span class="sd">pd.merge(df_reviews, holiday_mst,</span>
+<span class="sd">         left_on=&#39;dateUpdated&#39;, right_on=&#39;target_day&#39;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="s2">&quot;-------------------------------------------------------&quot;</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">datetime</a><ul>
+<li><a class="reference internal" href="#id1">日時型処理</a></li>
+<li><a class="reference internal" href="#id2">日時、日付型変換</a></li>
+<li><a class="reference internal" href="#id3">年月日、時刻、曜日変換</a></li>
+<li><a class="reference internal" href="#id4">日時差計算</a></li>
+<li><a class="reference internal" href="#id5">季節変換</a></li>
+<li><a class="reference internal" href="#timezone">Timezone変換</a></li>
+<li><a class="reference internal" href="#id6">平日休日判定</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="number.html" title="前の章へ">number</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/Transform/types/datetime.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="検索" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, EY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/Transform/types/datetime.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
